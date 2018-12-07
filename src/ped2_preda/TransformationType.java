@@ -1,5 +1,8 @@
 package ped2_preda;
 
+/**
+ * @author Miquel Ginés Borràs
+ */
 public enum TransformationType {
     BORRADO("borrado"),
     INSERCION("inserción"),

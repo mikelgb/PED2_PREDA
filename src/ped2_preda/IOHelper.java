@@ -13,50 +13,34 @@ public class IOHelper {
     }
 
     public EditionDistance readFromFile(File file) {
-        return null;
-//        Set<Integer> numSet = null;
-//        int sumGoal = 0, maxSubset = 0;
-//        BufferedReader br = null;
-//        FileReader fr = null;
-//        try {
-//            fr = new FileReader(file);
-//            br = new BufferedReader(fr);
-//            String currentLine;
-//            if (((currentLine = br.readLine()) != null)) {
-//                numSet = readNumSet(currentLine);
-//            }
-//            if (((currentLine = br.readLine()) != null)) {
-//                sumGoal = Integer.parseInt(currentLine);
-//            }
-//            if (((currentLine = br.readLine()) != null)) {
-//                maxSubset = Integer.parseInt(currentLine);
-//            }
-//
-//            br.close();
-//            fr.close();
-//            return  new SubsetSum(new ArrayList<Integer>(numSet), sumGoal, maxSubset);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        } catch (Exception e) {
-//            System.err.println("ERROR: Se ha introducido un valor duplicado en el conjunto de números de entrada.");
-//            return null;
-//        }
-    }
-
-    public EditionDistance readFromKeyboard() {
-        String sourceString = "", targetString = "";
+        BufferedReader br = null;
+        FileReader fr = null;
         try {
-            sourceString = readLineFromConsole("Introduce la palabra origen:");
-            targetString = readLineFromConsole("Introduce la palabra objetivo:");
-        } catch (NumberFormatException e) {
-            // Se ha introducido algo que no era un número, se parará la ejecución
-            System.err.println("ERROR: Se ha introducido algún carácter no válido.");
+            fr = new FileReader(file);
+            br = new BufferedReader(fr);
+            String sourceString = "", targetString = "";
+            String currentLine;
+            if (((currentLine = br.readLine()) != null)) {
+                sourceString = currentLine;
+            }
+            if (((currentLine = br.readLine()) != null)) {
+                targetString = currentLine;
+            }
+            br.close();
+            fr.close();
+            return new EditionDistance(sourceString, targetString);
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         } catch (Exception e) {
             System.err.println("ERROR: Se ha introducido un valor duplicado en el conjunto de números de entrada.");
             return null;
         }
+    }
+
+    public EditionDistance readFromKeyboard() {
+        String sourceString = readLineFromConsole("Introduce la palabra origen:");
+        String targetString = readLineFromConsole("Introduce la palabra objetivo:");
         return new EditionDistance(sourceString, targetString);
     }
 

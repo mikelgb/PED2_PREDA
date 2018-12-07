@@ -1,5 +1,8 @@
 package ped2_preda;
 
+/**
+ * @author Miquel Ginés Borràs
+ */
 public class Transformation {
 
     private TransformationType transformationType;
