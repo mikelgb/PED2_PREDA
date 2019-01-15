@@ -10,18 +10,36 @@ public class EditionDistance {
     private Transformation[] transformations;
     private int changes = 0;
 
+    private boolean trace = false;
+
+    /**
+     * Constructor
+     *
+     * @param sourceString Palabra origen
+     * @param targetString Palabra objetivo
+     */
     public EditionDistance(String sourceString, String targetString) {
-        this.sourceString = sourceString.toCharArray();
-        this.targetString = targetString.toCharArray();
-        this.table = new int[this.sourceString.length][this.targetString.length];
-        this.transformations = new Transformation[this.sourceString.length * this.targetString.length];
+            this.sourceString = sourceString.toCharArray();
+            this.targetString = targetString.toCharArray();
+            this.table = new int[this.sourceString.length][this.targetString.length];
+            this.transformations = new Transformation[this.sourceString.length * this.targetString.length];
+            System.out.println("Palabra original: " + sourceString);
+            System.out.println("Palabra objetivo: " + targetString);
     }
 
+    /**
+     * Llama a los métodos de computo del algoritmo
+     */
     public void computeEditionDistance() {
-        compute(sourceString, targetString, sourceString.length, targetString.length, table);
-        findTransformations(sourceString, targetString, sourceString.length, targetString.length, table, transformations);
+        if (!sourceString.equals(targetString)) {
+            compute(sourceString, targetString, sourceString.length, targetString.length, table);
+            findTransformations(sourceString, targetString, sourceString.length, targetString.length, table, transformations);
+        }
     }
 
+    /**
+     * Realiza las iteraciones necesarias para calcular la tabla de transformaciones
+     */
     private void compute(char[] sourceString, char[] targetString, int n, int m, int[][] table) {
         int i, j, tmp;
         for (i = 0; i < n; i++) {
@@ -40,24 +58,47 @@ public class EditionDistance {
                 }
             }
         }
+        if (trace) {
+            showCalculatedTable();
+        }
     }
 
+    /**
+     * Muestra la tabla de transformaciones por consola
+     */
+    private void showCalculatedTable() {
+        System.out.println("\r\nTabla calculada:");
+        for (int[] row : table) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println("");
+        }
+    }
+
+    /**
+     * Calcula las transformaciones necesarias a partir de la tabla de transformaciones
+     */
     private void findTransformations(char[] sourceString, char[] targetString, int n, int m, int[][] table, Transformation[] transformations) {
         int i = n - 1;
         int j = m - 1;
         int k = table[n - 1][m - 1];
         changes = k;
+        char[] changedString = targetString.clone();
         while (k > 0) {
             if (table[i][j] == (table[i - 1][j] + 1)) {
                 transformations[k] = new Transformation(TransformationType.BORRADO, j + 1);
+                changedString = transformations[k].setChangedString(sourceString, changedString);
                 k--;
                 i--;
             } else if (table[i][j] == (table[i][j - 1] + 1)) {
                 transformations[k] = new Transformation(TransformationType.INSERCION, j, targetString[j]);
+                changedString = transformations[k].setChangedString(sourceString, changedString);
                 k--;
                 j--;
             } else if (table[i][j] == (table[i - 1][j - 1] + 1)) {
                 transformations[k] = new Transformation(TransformationType.SUSTITUCION, j, targetString[j]);
+                changedString = transformations[k].setChangedString(sourceString, changedString);
                 k--;
                 j--;
                 i--;
@@ -68,35 +109,15 @@ public class EditionDistance {
         }
     }
 
-    public void printResults() {
-        for (int[] row : table) {
-            for (int n : row) {
-                System.out.print(" " + n);
-            }
-            System.out.println(" ");
-        }
-        System.out.println("\n\r ---------------------------------------- \n\r");
-        System.out.println("Cambios -> " + changes);
-        for (Transformation t : transformations) {
-            if (t != null) {
-                System.out.println(t.toString());
-            }
-        }
-    }
-
-    public String getSourceString() {
-        return new String(sourceString);
-    }
-
-    public String getTargetString() {
-        return new String(targetString);
-    }
-
     public Transformation[] getTransformations() {
         return transformations;
     }
 
     public int getChanges() {
         return changes;
+    }
+
+    public void setTrace(boolean trace) {
+        this.trace = trace;
     }
 }

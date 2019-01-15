@@ -10,6 +10,11 @@ public enum TransformationType {
 
     private String operation;
 
+    /**
+     * Enumerado con los diferentes tipos de transformación posible
+     *
+     * @param operation Transformación realizada
+     */
     TransformationType(String operation) {
         this.operation = operation;
     }
