@@ -85,11 +85,9 @@ public class Transformation {
     public String toString() {
         String msg = "Realizada operación de " + transformationType.operation() + " en la posición " + (position + 1);
         if (character != 0) {
-            msg += ", nuevo carácter \'" + character + "\'.";
-        } else {
-            msg += ".";
+            msg += ", nuevo carácter \'" + character + "\'";
         }
-        msg += new String(changedString);
+        msg += " -> " + new String(changedString).replaceAll(" ", "");
         return msg;
     }
 }
